@@ -26,9 +26,14 @@
 	"content_scripts": [ 
 		{
 			"matches": [ "https://*.duosecurity.com/frame/*", "https://*.github.com/*" ],
+<<<<<<< HEAD
 			"js": [
 				"js/contentScript.bundle.js"
 			  ],
+=======
+			"js": [ "content.js" ],
+			"css": [ "content.css" ],
+>>>>>>> 4f37ab3fe147789cf84971e83c0959fcc264c708
 			"run_at": "document_end"
 		}
  	],
@@ -39,7 +44,11 @@
 	"background": {
 		"persistent": false,
 		"scripts": [
+<<<<<<< HEAD
 			"js/background.bundle.js"
+=======
+			"js/background.js"
+>>>>>>> 4f37ab3fe147789cf84971e83c0959fcc264c708
 		]
 	}
 }
