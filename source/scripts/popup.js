@@ -44,6 +44,7 @@ async function loadTransactions() {
 	const site_creds = storage.site_creds;
 	console.log(storage);
 	if (('test' in site_creds)) {
+		document.querySelector('#output').textContent = 'Activated';
 		const client = new DuoClient(site_creds.test);
 		await client.import_key(site_creds.test.key);
 		console.log(client);
@@ -56,26 +57,33 @@ async function loadTransactions() {
 		console.log(transactions);
 		for (const tx of transactions.transactions) {
 			const row = document.createElement('tr');
-			row.append(document.createElement('td')).textContent = tx.summary;
-			row.append(document.createElement('td')).textContent = JSON.stringify(tx.attributes);
+			const summary = document.createElement('td');
+			row.append(summary);
+			summary.textContent = tx.summary;
+
+			const attributes = document.createElement('td');
+			row.append(attributes);
+			attributes.textContent = JSON.stringify(tx.attributes);
 			{
-				const cell = row.append(document.createElement('td'));
+				const cell = document.createElement('td');
+				row.append(cell);
 				const button = document.createElement('input');
 				button.type = 'button';
 				button.value = 'accept';
 				cell.append(button);
-				button.addEventListener('click', () => {
-					client.reply_transaction(tx.urgid, 'approve');
+				button.addEventListener('click', async () => {
+					await client.reply_transaction(tx.urgid, 'approve');
 					loadTransactions();
 				});
 			}
 
-			const cell = row.append(document.createElement('td'));
+			const cell = document.createElement('td');
+			row.append(cell);
 			const button = document.createElement('input');
 			button.type = 'button';
 			button.value = 'reject';
-			button.addEventListener('click', () => {
-				client.reply_transaction(tx.urgid, 'reject');
+			button.addEventListener('click', async () => {
+				await client.reply_transaction(tx.urgid, 'reject');
 				loadTransactions();
 			});
 			cell.append(button);
@@ -102,6 +110,8 @@ window.addEventListener('load', function () {
 		site_creds.test = {response: client.export_response(), key: await client.export_keyPair(), encrypted: false};
 		await browser.storage.local.set(storage);
 		// Document.getElementById("output").innerText = JSON.stringify({ "response": client.export_response(), "key": await client.export_keyPair() }).replace(/\n/g, "&#13;&#10;")
+		loadTransactions();
 	});
+	this.document.querySelector('#refresh').addEventListener('click', loadTransactions);
 });
 

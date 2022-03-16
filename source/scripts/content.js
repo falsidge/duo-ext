@@ -6,7 +6,7 @@ async function init() {
 		const color = 'rgb(' + options.colorRed + ', ' + options.colorGreen + ',' + options.colorBlue + ')';
 		const text = options.text;
 		const notice = document.createElement('div');
-		notice.innerHTML = text;
+		notice.textContent = text;
 		document.body.append(notice);
 		notice.id = 'text-notice';
 		notice.style.border = '2px solid ' + color;
