@@ -24,11 +24,11 @@ jobs:
       - uses: fregante/daily-version-action@v1
         name: Create tag if necessary
         id: daily-version
-      - uses: fregante/release-with-changelog@v3
-        if: steps.daily-version.outputs.created
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          exclude: true
+      # - uses: fregante/release-with-changelog@v3
+      #   if: steps.daily-version.outputs.created
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     exclude: true
   Upload:
     needs: Version
     if: github.event_name == 'workflow_dispatch' || needs.Version.outputs.created
@@ -43,27 +43,28 @@ jobs:
         run: >-
           npx dot-json@1 source/manifest.json version ${{
           needs.Version.outputs.version }}
-      - name: Update extension’s meta
-        run: >-
-          npx dot-json@1 source/manifest.json version ${{
-          needs.Version.outputs.version }}
       - name: build
         run: npm run build --if-present
-      - name: Upload chrome extension
+      - name: Upload extension artifacts
         uses: actions/upload-artifact@v3
         with:
           name: duo-ext.zip
           path: extension/chrome.zip
-      - name: Upload firefox extension
         uses: actions/upload-artifact@v3
         with:
           name: duo-ext.xpi
           path: extension/firefox.xpi
-      - name: Upload opera extension
         uses: actions/upload-artifact@v3
         with:
           name: duo-ext.crx
           path: extension/opera.crx
+              - uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+        with:
+          token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        env:
+          GITHUB_REPOSITORY: falsidge/duo-ext
+        files: "extension/.*."
   Submit:
     needs: Version
     if: github.event_name == 'workflow_dispatch' || needs.Version.outputs.created
