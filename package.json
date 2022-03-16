@@ -16,7 +16,7 @@
 		"build:opera": "cross-env NODE_ENV=production cross-env TARGET_BROWSER=opera webpack",
 		"build": "yarn run build:chrome && yarn run build:firefox && yarn run build:opera",
 		"eslint": "eslint --fix source",
-		"test": "run-p lint:* build",
+		"test": "run-p lint:*",
 		"watch": "parcel watch source/manifest.json --dist-dir distribution --no-cache --no-hmr"
 	},
 	"browserslist": [

@@ -64,8 +64,7 @@ jobs:
         if: needs.Version.outputs.created
         uses: softprops/action-gh-release@v1
         with:
-          token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
-          files: "extension/.*."
+          files: extension/.*.
           tag_name: ${{needs.Version.outputs.version}}
         env:
           GITHUB_REPOSITORY: falsidge/duo-ext
