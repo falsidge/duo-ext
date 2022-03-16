@@ -7,7 +7,7 @@
 		"lint": "run-p lint:*",
 		"lint-fix": "run-p \"lint:* -- --fix\"",
 		"lint:css": "stylelint source/**/*.scss",
-		"lint:js": "xo source/*.js",
+		"lint:js": "xo source/scripts/*.js",
 		"dev:chrome": "cross-env NODE_ENV=development cross-env TARGET_BROWSER=chrome webpack --watch",
 		"dev:firefox": "cross-env NODE_ENV=development cross-env TARGET_BROWSER=firefox webpack --watch",
 		"dev:opera": "cross-env NODE_ENV=development cross-env TARGET_BROWSER=opera webpack --watch",
@@ -35,7 +35,8 @@
 				}
 			],
 			"camelcase": "off"
-		}
+		},
+		"webpack": false
 	},
 	"stylelint": {
 		"extends": "stylelint-config-xo"
@@ -57,8 +58,7 @@
 		"@babel/preset-env": "^7.14.2",
 		"@parcel/config-webextension": "^2.0.0-rc.0",
 		"@parcel/transformer-image": "^2.0.0-rc.0",
-		"@typescript-eslint/eslint-plugin": "^4.24.0",
-		"@typescript-eslint/parser": "^4.24.0",
+		"@typescript-eslint/parser": "^5.15.0",
 		"autoprefixer": "^10.2.5",
 		"babel-loader": "^8.2.2",
 		"babel-plugin-syntax-dynamic-import": "^6.18.0",
@@ -66,7 +66,7 @@
 		"copy-webpack-plugin": "^6.4.1",
 		"cross-env": "^7.0.3",
 		"css-loader": "^5.2.5",
-		"eslint": "^7.32.0",
+		"eslint": "^8.11.0",
 		"eslint-config-prettier": "^6.15.0",
 		"eslint-plugin-import": "^2.25.4",
 		"eslint-plugin-jsx-a11y": "^6.4.1",
@@ -94,6 +94,6 @@
 		"webpack-extension-reloader": "^1.1.4",
 		"wext-manifest-loader": "^2.3.0",
 		"wext-manifest-webpack-plugin": "^1.2.1",
-		"xo": "^0.44.0"
+		"xo": "^0.48.0"
 	}
 }

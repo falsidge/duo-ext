@@ -2,7 +2,7 @@ function string2ab(string_) {
 	const buf = new ArrayBuffer(string_.length);
 	const bufView = new Uint8Array(buf);
 	for (let i = 0, stringLength = string_.length; i < stringLength; i++) {
-		bufView[i] = string_.charCodeAt(i);
+		bufView[i] = string_.codePointAt(i);
 	}
 
 	return buf;
