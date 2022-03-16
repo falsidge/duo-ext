@@ -29,6 +29,35 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           exclude: true
+  Upload:
+      - uses: actions/checkout@v2
+      - name: install
+        run: npm ci || npm install
+      - name: Update extension’s meta
+        run: >-
+          npx dot-json@1 source/manifest.json version ${{
+          needs.Version.outputs.version }}
+      - name: Update extension’s meta
+        run: >-
+          npx dot-json@1 source/manifest.json version ${{
+          needs.Version.outputs.version }}
+      - name: build
+        run: npm run build --if-present
+      - name: Upload chrome extension
+        uses: actions/upload-artifact@v3
+        with:
+          name: duo-ext.zip
+          path: extension/chrome.zip
+      - name: Upload firefox extension
+        uses: actions/upload-artifact@v3
+        with:
+          name: duo-ext.xpi
+          path: extension/firefox.xpi
+      - name: Upload opera extension
+        uses: actions/upload-artifact@v3
+        with:
+          name: duo-ext.crx
+          path: extension/opera.crx
   Submit:
     needs: Version
     if: github.event_name == 'workflow_dispatch' || needs.Version.outputs.created
@@ -47,23 +76,8 @@ jobs:
         run: >-
           npx dot-json@1 source/manifest.json version ${{
           needs.Version.outputs.version }}
-      - name: byild
+      - name: build
         run: npm run build --if-present
-      - name: Upload chrome extension
-        uses: actions/upload-artifact@v3
-        with:
-          name: duo-ext.zip
-          path: $DIRECTORY/chrome.zip
-      - name: Upload firefox extension
-        uses: actions/upload-artifact@v3
-        with:
-          name: duo-ext.zip
-          path: $DIRECTORY/firefox.xpi
-      - name: Upload opera extension
-        uses: actions/upload-artifact@v3
-        with:
-          name: duo-ext.zip
-          path: $DIRECTORY/opera.crx
       - name: Submit
         run: |
           case ${{ matrix.command }} in
