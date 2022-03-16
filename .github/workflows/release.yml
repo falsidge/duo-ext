@@ -45,20 +45,23 @@ jobs:
           needs.Version.outputs.version }}
       - name: build
         run: npm run build --if-present
-      - name: Upload extension artifacts
+      - name: Upload chrome artifact
         uses: actions/upload-artifact@v3
         with:
           name: duo-ext.zip
           path: extension/chrome.zip
-      - uses: actions/upload-artifact@v3
+      - name: Upload firefox artifact
+        uses: actions/upload-artifact@v3
         with:
           name: duo-ext.xpi
           path: extension/firefox.xpi
-      - uses: actions/upload-artifact@v3
+      - name: Upload opera artifact
+        uses: actions/upload-artifact@v3
         with:
           name: duo-ext.crx
           path: extension/opera.crx
-      - uses: softprops/action-gh-release@v1
+      - name: Upload Github release
+        uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
