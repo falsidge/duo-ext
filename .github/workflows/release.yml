@@ -1,5 +1,5 @@
 env:
-  DIRECTORY: distribution
+  DIRECTORY: extension
 
 # FILE GENERATED WITH: npx ghat fregante/ghatemplates/webext
 # SOURCE: https://github.com/fregante/ghatemplates
@@ -43,11 +43,27 @@ jobs:
       - uses: actions/checkout@v2
       - name: install
         run: npm ci || npm install
-      - run: npm run build --if-present
       - name: Update extension’s meta
         run: >-
-          npx dot-json@1 $DIRECTORY/manifest.json version ${{
+          npx dot-json@1 source/manifest.json version ${{
           needs.Version.outputs.version }}
+      - name: byild
+        run: npm run build --if-present
+      - name: Upload chrome extension
+        uses: actions/upload-artifact@v3
+        with:
+          name: duo-ext.zip
+          path: $DIRECTORY/chrome.zip
+      - name: Upload firefox extension
+        uses: actions/upload-artifact@v3
+        with:
+          name: duo-ext.zip
+          path: $DIRECTORY/firefox.xpi
+      - name: Upload opera extension
+        uses: actions/upload-artifact@v3
+        with:
+          name: duo-ext.zip
+          path: $DIRECTORY/opera.crx
       - name: Submit
         run: |
           case ${{ matrix.command }} in

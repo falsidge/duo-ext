@@ -1,11 +1,21 @@
 {
+	"name": "duo-ext",
+	"version": "1.0.0",
+	"description": "Extension for duo",
 	"private": true,
 	"scripts": {
-		"build": "parcel build source/manifest.json --no-content-hash --no-source-maps --dist-dir distribution --no-cache --detailed-report 0",
 		"lint": "run-p lint:*",
-		"lint-fix": "run-p 'lint:* -- --fix'",
-		"lint:css": "stylelint source/**/*.css",
-		"lint:js": "xo",
+		"lint-fix": "run-p \"lint:* -- --fix\"",
+		"lint:css": "stylelint source/**/*.scss",
+		"lint:js": "xo source/*.js",
+		"dev:chrome": "cross-env NODE_ENV=development cross-env TARGET_BROWSER=chrome webpack --watch",
+		"dev:firefox": "cross-env NODE_ENV=development cross-env TARGET_BROWSER=firefox webpack --watch",
+		"dev:opera": "cross-env NODE_ENV=development cross-env TARGET_BROWSER=opera webpack --watch",
+		"build:chrome": "cross-env NODE_ENV=production cross-env TARGET_BROWSER=chrome webpack",
+		"build:firefox": "cross-env NODE_ENV=production cross-env TARGET_BROWSER=firefox webpack",
+		"build:opera": "cross-env NODE_ENV=production cross-env TARGET_BROWSER=opera webpack",
+		"build": "yarn run build:chrome && yarn run build:firefox && yarn run build:opera",
+		"eslint": "eslint --fix source",
 		"test": "run-p lint:* build",
 		"watch": "parcel watch source/manifest.json --dist-dir distribution --no-cache --no-hmr"
 	},
@@ -23,26 +33,67 @@
 				{
 					"varsIgnorePattern": "browser"
 				}
-			]
+			],
+			"camelcase": "off"
 		}
 	},
 	"stylelint": {
 		"extends": "stylelint-config-xo"
 	},
 	"dependencies": {
+		"@babel/runtime": "^7.14.0",
+		"advanced-css-reset": "^1.2.2",
+		"emoji-log": "^1.0.2",
+		"webext-base-css": "^1.3.1",
 		"webext-options-sync": "^2.0.1",
 		"webextension-polyfill": "^0.8.0"
 	},
 	"devDependencies": {
+		"@babel/core": "^7.14.3",
+		"@babel/eslint-parser": "^7.14.3",
+		"@babel/plugin-proposal-object-rest-spread": "^7.14.2",
+		"@babel/plugin-transform-destructuring": "^7.13.17",
+		"@babel/plugin-transform-runtime": "^7.14.3",
+		"@babel/preset-env": "^7.14.2",
 		"@parcel/config-webextension": "^2.0.0-rc.0",
 		"@parcel/transformer-image": "^2.0.0-rc.0",
+		"@typescript-eslint/eslint-plugin": "^4.24.0",
+		"@typescript-eslint/parser": "^4.24.0",
+		"autoprefixer": "^10.2.5",
+		"babel-loader": "^8.2.2",
+		"babel-plugin-syntax-dynamic-import": "^6.18.0",
+		"clean-webpack-plugin": "^3.0.0",
+		"copy-webpack-plugin": "^6.4.1",
+		"cross-env": "^7.0.3",
+		"css-loader": "^5.2.5",
+		"eslint": "^7.32.0",
+		"eslint-config-prettier": "^6.15.0",
+		"eslint-plugin-import": "^2.25.4",
+		"eslint-plugin-jsx-a11y": "^6.4.1",
+		"eslint-plugin-node": "^11.1.0",
+		"eslint-plugin-prettier": "^3.4.0",
+		"eslint-plugin-react": "^7.29.4",
+		"eslint-plugin-react-hooks": "^4.2.0",
+		"filemanager-webpack-plugin": "^3.1.1",
+		"html-webpack-plugin": "^4.5.2",
+		"mini-css-extract-plugin": "^1.6.0",
+		"node-sass": "^6.0.1",
 		"npm-run-all": "^4.1.5",
+		"optimize-css-assets-webpack-plugin": "^5.0.6",
 		"parcel": "^2.0.0-rc.0",
+		"postcss": "^8.3.0",
+		"postcss-loader": "^4.3.0",
+		"prettier": "^2.3.0",
+		"resolve-url-loader": "^3.1.3",
+		"sass-loader": "^10.2.0",
 		"stylelint": "^13.13.1",
 		"stylelint-config-xo": "^0.20.0",
+		"terser-webpack-plugin": "^4.2.3",
+		"webpack": "^4.46.0",
+		"webpack-cli": "^4.7.0",
+		"webpack-extension-reloader": "^1.1.4",
+		"wext-manifest-loader": "^2.3.0",
+		"wext-manifest-webpack-plugin": "^1.2.1",
 		"xo": "^0.44.0"
-	},
-	"webExt": {
-		"sourceDir": "distribution"
 	}
 }

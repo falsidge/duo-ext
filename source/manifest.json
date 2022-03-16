@@ -5,24 +5,30 @@
 	"homepage_url": "https://github.com/fregante/browser-extension-template",
 	"manifest_version": 2,
 	"minimum_chrome_version": "74",
-	"applications": {
+	"__firefox__applications": {
 		"gecko": {
 			"id": "awesome-extension@notlmn.github.io",
 			"strict_min_version": "67.0"
 		}
 	},
+	"browser_action": {
+		"default_title": "Addon",
+		"default_popup": "popup.html"
+	},
 	"icons": {
-		"128": "icon.png"
+		"16": "assets/icons/favicon-16.png"
 	},
 	"permissions": [
-		"https://github.com/fregante/browser-extension-template/*",
+		"https://*.duosecurity.com/frame/*",
+		"https://*.duosecurity.com/*",
 		"storage"
 	],
 	"content_scripts": [ 
 		{
-			"matches": [ "https://github.com/fregante/browser-extension-template/*" ],
-			"js": [ "content.js" ],
-			"css": [ "content.css" ],
+			"matches": [ "https://*.duosecurity.com/frame/*", "https://*.github.com/*" ],
+			"js": [
+				"js/contentScript.bundle.js"
+			  ],
 			"run_at": "document_end"
 		}
  	],
@@ -33,7 +39,7 @@
 	"background": {
 		"persistent": false,
 		"scripts": [
-			"background.js"
+			"js/background.bundle.js"
 		]
 	}
 }
