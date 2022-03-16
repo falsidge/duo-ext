@@ -50,7 +50,7 @@ jobs:
         with:
           name: duo-ext.zip
           path: extension/chrome.zip
-      -uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v3
         with:
           name: duo-ext.xpi
           path: extension/firefox.xpi
