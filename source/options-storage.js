@@ -8,7 +8,7 @@ export default new OptionsSync({
 		text: 'Set a text!',
 		loggedin: false,
 		client: {},
-		key : ""
+		key: '',
 	},
 	migrations: [
 		OptionsSync.migrations.removeUnused,

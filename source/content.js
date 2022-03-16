@@ -2,9 +2,7 @@ import optionsStorage from './options-storage.js';
 
 async function init() {
 	const options = await optionsStorage.getAll();
-	if (options.loggedin)
-	{
-
+	if (options.loggedin) {
 		const color = 'rgb(' + options.colorRed + ', ' + options.colorGreen + ',' + options.colorBlue + ')';
 		const text = options.text;
 		const notice = document.createElement('div');
