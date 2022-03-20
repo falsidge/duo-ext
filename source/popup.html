@@ -1,16 +1,36 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 </head>
+
 <body>
-    <p>Hello World</p>
-    <input id="code">
-    <input type="button" value="Activate" id="activate">
-    <input type="button" value="Clear Storage" id="clear">
-    <input type="button" value="Refresh" id="refresh">
+    <div>
+        <input id="code">
+        <input type="button" value="Activate" id="activate">
+    </div>
+    <div>
+        
+        <input type="button" value="Import key" id="import_proxy">
+        <input type="file" value="Import key" id="import" name="import" accept="application/json" style="display:none">
+        <input type="button" value="Clear Storage" id="clear">
+        <input type="button" value="Refresh" id="refresh">
+    </div>
+    <div class="tab" id="tab">
+    </div>
     <p id="output"></p>
     <table id="transactionlist">
     </table>
+    <div>
+        <input type="checkbox" id="autoapprove" name="autoapprove">
+        <label for="autoapprove">Auto-approve</label>
+        <input type="checkbox" id="notification" name="notification" checked>
+        <label for="notifications">Notifications</label>
+    </div>
+    <div>
+        <input type="button" value="Export key" id="export">
+    </div>
 </body>
+
 </html>

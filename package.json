@@ -1,6 +1,6 @@
 {
 	"name": "duo-ext",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Extension for duo",
 	"private": true,
 	"scripts": {
@@ -34,7 +34,8 @@
 					"varsIgnorePattern": "browser"
 				}
 			],
-			"camelcase": "off"
+			"camelcase": "off",
+			"unicorn/no-empty-file" : "off"
 		},
 		"webpack": false
 	},

@@ -19,25 +19,23 @@
 		"16": "assets/icons/favicon-16.png"
 	},
 	"permissions": [
-		"https://*.duosecurity.com/frame/*",
 		"https://*.duosecurity.com/*",
-		"storage"
+		"storage",
+		"webRequest",
+		"notifications"
 	],
 	"content_scripts": [ 
 		{
-			"matches": [ "https://*.duosecurity.com/frame/*", "https://*.github.com/*" ],
+			"matches": [ "https://*.duosecurity.com/*"],
 			"js": [
 				"js/content.bundle.js"
 			  ],
-			"run_at": "document_end"
+			"run_at": "document_end",
+			"match_about_blank": true,
+			"all_frames": true
 		}
  	],
-	"options_ui": {
-		"chrome_style": true,
-		"page": "options.html"
-	},
 	"background": {
-		"persistent": false,
 		"scripts": [
 			"js/background.bundle.js"
 		]
