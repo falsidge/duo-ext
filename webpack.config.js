@@ -8,7 +8,7 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ExtensionReloader = require('webpack-extension-reloader');
 const WextManifestWebpackPlugin = require('wext-manifest-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 const targetBrowser = process.env.TARGET_BROWSER;
@@ -183,11 +183,7 @@ module.exports = {
         },
         extractComments: false,
       }),
-      new OptimizeCSSAssetsPlugin({
-        cssProcessorPluginOptions: {
-          preset: ['default', {discardComments: {removeAll: true}}],
-        },
-      }),
+      new CssMinimizerPlugin(),
       new FilemanagerPlugin({
         events: {
           onEnd: {
