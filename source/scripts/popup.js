@@ -144,7 +144,7 @@ window.addEventListener('load', function () {
 		await client.generate_key();
 		client.read_code(document.querySelector('#code').value);
 		await client.activate();
-		site_creds[client.export_response().host] = {response: client.export_response(), key: await client.export_keyPair(), encrypted: false};
+		site_creds[client.export_response().host] = {response: client.export_response(), key: await client.export_keyPair(), encrypted: false, notification: true};
 		await browser.storage.local.set(storage);
 		// Document.getElementById("output").innerText = JSON.stringify({ "response": client.export_response(), "key": await client.export_keyPair() }).replace(/\n/g, "&#13;&#10;")
 		loadTransactions();

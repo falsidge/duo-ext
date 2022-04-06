@@ -25,6 +25,7 @@ browser.webRequest.onCompleted.addListener(
 						title: 'Duo Push',
 						message: 'Click to accept push \n' + tx.summary + '\n' + JSON.stringify(tx.attributes),
 					});
+					console.log('notification created');
 				}
 
 				if (site_creds[href.hostname].autoapprove && transactions.transactions.length === 1) {

@@ -1,0 +1,43 @@
+{
+	"name": "duo-ext",
+	"version": "0.0.0",
+	"description": "An extension for duo",
+	"homepage_url": "https://github.com/falsidge/duo-ext",
+	"manifest_version": 3,
+	"minimum_chrome_version": "74",
+	"__firefox__applications": {
+		"gecko": {
+			"id": "duo-ext@falsidge.github.io",
+			"strict_min_version": "67.0"
+		}
+	},
+	"action": {
+		"default_title": "Addon",
+		"default_popup": "popup.html"
+	},
+	"icons": {
+		"16": "assets/icons/favicon-16.png"
+	},
+	"host_permissions":[
+		"*://*.duosecurity.com/*"
+	],
+	"permissions": [
+		"storage",
+		"webRequest",
+		"notifications"
+	],
+	"content_scripts": [ 
+		{
+			"matches": [ "https://*.duosecurity.com/*"],
+			"js": [
+				"js/content.bundle.js"
+			  ],
+			"run_at": "document_end",
+			"match_about_blank": true,
+			"all_frames": true
+		}
+ 	],
+	 "background": {
+		"service_worker": "js/background.bundle.js"
+	}
+}

@@ -1,5 +1,4 @@
 import browser from 'webextension-polyfill';
-
 import DuoClient from './client.js';
 
 function activate() {
@@ -81,7 +80,7 @@ async function loadPages() {
 
 				const storage = await browser.storage.local.get({site_creds: {}});
 				storage.site_creds[window.location.host] = {
-					response: client.export_response(), key: await client.export_keyPair(), encrypted: false, activation: false,
+					response: client.export_response(), key: await client.export_keyPair(), encrypted: false, activation: false, notification: true,
 				};
 				browser.storage.local.set(storage);
 

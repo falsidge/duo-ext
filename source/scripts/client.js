@@ -33,11 +33,11 @@ class DuoClient {
 		const pemFooter = '-----END PRIVATE KEY-----';
 		const pemContents = private_key.trim().slice(pemHeader.length, private_key.length - pemFooter.length).replace(/\n/g, '');
 		// Base64 decode the string to get the binary data
-		const binaryDerString = window.atob(pemContents);
+		const binaryDerString = atob(pemContents);
 		// Convert from a binary string to an ArrayBuffer
 		const binaryDer = string2ab(binaryDerString);
 
-		return window.crypto.subtle.importKey(
+		return crypto.subtle.importKey(
 			'pkcs8',
 			binaryDer,
 			{
@@ -54,11 +54,11 @@ class DuoClient {
 		const pemFooter = '-----END PUBLIC KEY-----';
 		const pemContents = public_key.trim().slice(pemHeader.length, public_key.length - pemFooter.length).replace(/\n/g, '');
 		// Base64 decode the string to get the binary data
-		const binaryDerString = window.atob(pemContents);
+		const binaryDerString = atob(pemContents);
 		// Convert from a binary string to an ArrayBuffer
 		const binaryDer = string2ab(binaryDerString);
 
-		return window.crypto.subtle.importKey(
+		return crypto.subtle.importKey(
 			'spki',
 			binaryDer,
 			{
@@ -76,7 +76,7 @@ class DuoClient {
 	}
 
 	async generate_key() {
-		this.keyPair = await window.crypto.subtle.generateKey(
+		this.keyPair = await crypto.subtle.generateKey(
 			{
 				name: 'RSASSA-PKCS1-v1_5',
 				modulusLength: 2048,
@@ -91,12 +91,12 @@ class DuoClient {
 	async export_private_key() { // Crypto API doesn't support deriving public key from private key with extra params
 		// https://github.com/mdn/dom-examples/blob/master/web-crypto/export-key/pkcs8.js
 
-		const exported = await window.crypto.subtle.exportKey(
+		const exported = await crypto.subtle.exportKey(
 			'pkcs8',
 			this.keyPair.privateKey,
 		);
 		const exportedAsString = ab2string(exported);
-		const exportedAsBase64 = window.btoa(exportedAsString);
+		const exportedAsBase64 = btoa(exportedAsString);
 		const pemExported = `-----BEGIN PRIVATE KEY-----\n${exportedAsBase64.match(/.{1,64}/g).join('\n')}\n-----END PRIVATE KEY-----`;
 
 		return pemExported;
@@ -105,12 +105,12 @@ class DuoClient {
 	async export_public_key() {
 		// https://github.com/mdn/dom-examples/blob/master/web-crypto/export-key/pkcs8.js
 
-		const exported = await window.crypto.subtle.exportKey(
+		const exported = await crypto.subtle.exportKey(
 			'spki',
 			this.keyPair.publicKey,
 		);
 		const exportedAsString = ab2string(exported);
-		const exportedAsBase64 = window.btoa(exportedAsString);
+		const exportedAsBase64 = btoa(exportedAsString);
 		const pemExported = `-----BEGIN PUBLIC KEY-----\n${exportedAsBase64.match(/.{1,64}/g).join('\n')}\n-----END PUBLIC KEY-----`;
 
 		return pemExported;
@@ -130,7 +130,7 @@ class DuoClient {
 
 		const [activate_code, host] = code.split('-');
 		this.code = activate_code;
-		this.host = window.atob(host);
+		this.host = atob(host);
 	}
 
 	import_response(response) {
@@ -191,7 +191,7 @@ class DuoClient {
 		const encoder = new TextEncoder();
 		const bin = encoder.encode(message);
 		const signature = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', this.keyPair.privateKey, bin);
-		return 'Basic ' + window.btoa(this.pkey + ':' + window.btoa(ab2string(signature)));
+		return 'Basic ' + btoa(this.pkey + ':' + btoa(ab2string(signature)));
 	}
 
 	async get_transactions() {

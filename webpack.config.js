@@ -6,28 +6,28 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const ExtensionReloader = require('webpack-extension-reloader');
+// const ExtensionReloader = require('webpack-extension-reloader');
 const WextManifestWebpackPlugin = require('wext-manifest-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 const targetBrowser = process.env.TARGET_BROWSER;
 
-const extensionReloaderPlugin =
-  nodeEnv === 'development'
-    ? new ExtensionReloader({
-        port: 9090,
-        reloadPage: true,
-        entries: {
-          // TODO: reload manifest on update
-          contentScript: 'content',
-          background: 'background',
-          extensionPage: ['popup', 'options'],
-        },
-      })
-    : () => {
-        this.apply = () => {};
-      };
+// const extensionReloaderPlugin =
+//   nodeEnv === 'development'
+//     ? new ExtensionReloader({
+//         port: 9090,
+//         reloadPage: true,
+//         entries: {
+//           // TODO: reload manifest on update
+//           contentScript: 'content',
+//           background: 'background',
+//           extensionPage: ['popup', 'options'],
+//         },
+//       })
+//     : () => {
+//         this.apply = () => {};
+//       };
 
 const getExtensionFileType = (browser) => {
   if (browser === 'opera') {
@@ -53,7 +53,7 @@ module.exports = {
   },
 
   entry: {
-    manifest: './source/manifest.json',
+    manifest: targetBrowser === 'firefox' ? './source/manifest.v2.json' : './source/manifest.v3.json',
     background: './source/scripts/background.js',
     content: './source/scripts/content.js',
     popup: './source/scripts/popup.js',
@@ -69,7 +69,7 @@ module.exports = {
     rules: [
       {
         type: 'javascript/auto', // prevent webpack handling json with its own loaders,
-        test: /manifest\.json$/,
+        test: /manifest\..*.json$/,
         use: {
           loader: 'wext-manifest-loader',
           options: {
@@ -168,7 +168,7 @@ module.exports = {
       patterns: [{from: 'source/assets', to: 'assets'}],
     }),
     // plugin to enable browser reloading in development mode
-    extensionReloaderPlugin,
+    // extensionReloaderPlugin,
   ],
 
   optimization: {
