@@ -4,7 +4,7 @@
 	"description": "An extension for duo",
 	"homepage_url": "https://github.com/falsidge/duo-ext",
 	"manifest_version": 3,
-	"minimum_chrome_version": "74",
+	"minimum_chrome_version": "88",
 	"__firefox__applications": {
 		"gecko": {
 			"id": "duo-ext@falsidge.github.io",
@@ -22,9 +22,10 @@
 		"*://*.duosecurity.com/*"
 	],
 	"permissions": [
+		"notifications",
 		"storage",
-		"webRequest",
-		"notifications"
+		"webNavigation",
+		"webRequest"
 	],
 	"content_scripts": [ 
 		{

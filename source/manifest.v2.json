@@ -20,9 +20,10 @@
 	},
 	"permissions": [
 		"https://*.duosecurity.com/*",
+		"notifications",
 		"storage",
-		"webRequest",
-		"notifications"
+		"webNavigation",
+		"webRequest"
 	],
 	"content_scripts": [ 
 		{
