@@ -12,7 +12,6 @@ const WebpackDevServer = require("webpack-dev-server");
 
 const nodeEnv = process.env.NODE_ENV || "development";
 const targetBrowser = process.env.TARGET_BROWSER;
-process.traceDeprecation = true;
 
 // const extensionReloaderPlugin =
 //   nodeEnv === 'development'
@@ -166,9 +165,9 @@ module.exports = (env, argv) => {
 							return Buffer.from(
 								JSON.stringify(
 									{
+										...JSON.parse(content.toString()),
 										description: process.env.npm_package_description,
 										version: process.env.npm_package_version,
-										...JSON.parse(content.toString()),
 									},
 									null,
 									"\t"
