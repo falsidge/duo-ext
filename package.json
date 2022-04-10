@@ -18,13 +18,14 @@
 		"build": "yarn run build:chrome && yarn run build:firefox && yarn run build:opera",
 		"eslint": "eslint --fix source",
 		"test": "run-p lint:*",
-		"watch": "parcel watch source/manifest.json --dist-dir distribution --no-cache --no-hmr"
-	},    
+		"watch": "parcel watch source/manifest.json --dist-dir distribution --no-cache --no-hmr",
+		"prepare": "husky install"
+	},
 	"husky": {
-        "hooks": {
-            "pre-commit": "lint-fix"
-        }
-    },
+		"hooks": {
+			"pre-commit": "lint-fix"
+		}
+	},
 	"browserslist": [
 		"last 1 Chrome version",
 		"last 1 Firefox version"
