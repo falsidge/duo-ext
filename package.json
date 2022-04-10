@@ -19,7 +19,12 @@
 		"eslint": "eslint --fix source",
 		"test": "run-p lint:*",
 		"watch": "parcel watch source/manifest.json --dist-dir distribution --no-cache --no-hmr"
-	},
+	},    
+	"husky": {
+        "hooks": {
+            "pre-commit": "lint-fix"
+        }
+    },
 	"browserslist": [
 		"last 1 Chrome version",
 		"last 1 Firefox version"
@@ -92,6 +97,7 @@
 		"eslint-plugin-react-hooks": "^4.4.0",
 		"filemanager-webpack-plugin": "^7.0.0-beta.0",
 		"html-webpack-plugin": "^5.5.0",
+		"husky": "^7.0.4",
 		"mini-css-extract-plugin": "^2.6.0",
 		"node-sass": "^7.0.1",
 		"npm-run-all": "^4.1.5",
