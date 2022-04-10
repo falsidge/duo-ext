@@ -25,20 +25,16 @@
 		"webNavigation",
 		"webRequest"
 	],
-	"content_scripts": [ 
+	"content_scripts": [
 		{
-			"matches": [ "https://*.duosecurity.com/*"],
-			"js": [
-				"js/content.bundle.js"
-			  ],
+			"matches": ["https://*.duosecurity.com/*"],
+			"js": ["js/content.bundle.js"],
 			"run_at": "document_end",
 			"match_about_blank": true,
 			"all_frames": true
 		}
- 	],
+	],
 	"background": {
-		"scripts": [
-			"js/background.bundle.js"
-		]
+		"scripts": ["js/background.bundle.js"]
 	}
 }

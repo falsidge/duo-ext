@@ -18,27 +18,18 @@
 	"icons": {
 		"16": "assets/icons/favicon-16.png"
 	},
-	"host_permissions":[
-		"*://*.duosecurity.com/*"
-	],
-	"permissions": [
-		"notifications",
-		"storage",
-		"webNavigation",
-		"webRequest"
-	],
-	"content_scripts": [ 
+	"host_permissions": ["*://*.duosecurity.com/*"],
+	"permissions": ["notifications", "storage", "webNavigation", "webRequest"],
+	"content_scripts": [
 		{
-			"matches": [ "https://*.duosecurity.com/*"],
-			"js": [
-				"js/content.bundle.js"
-			  ],
+			"matches": ["https://*.duosecurity.com/*"],
+			"js": ["js/content.bundle.js"],
 			"run_at": "document_end",
 			"match_about_blank": true,
 			"all_frames": true
 		}
- 	],
-	 "background": {
+	],
+	"background": {
 		"service_worker": "js/background.bundle.js"
 	}
 }

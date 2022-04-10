@@ -2,11 +2,15 @@
 
 ## Features
 
-- Activate by code
-- Lists current duo notifications
+- Activate by inputing code or by pressing a button
+- Extension popop lists current duo pushes
+- Auto approves duo pushes for requests made in current browser
+- Notifications for duo pushes
+- Support for multiple sites
 
 ## Getting started
 
+Activate duo-ext by going to the duo add devices page of your organization and press the button activate or input activation code from the qr code.
 
 ### Build locally
 
