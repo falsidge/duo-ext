@@ -7,7 +7,6 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 // const ExtensionReloader = require('webpack-extension-reloader');
-// const WextManifestWebpackPlugin = require('wext-manifest-webpack-plugin');
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const WebpackDevServer = require("webpack-dev-server");
 
@@ -56,10 +55,6 @@ module.exports = (env, argv) => {
 		},
 
 		entry: {
-			manifest:
-				targetBrowser === "firefox"
-					? "./source/manifest.v2.json"
-					: "./source/manifest.v3.json",
 			background: "./source/scripts/background.js",
 			content: "./source/scripts/content.js",
 			popup: "./source/scripts/popup.js",
@@ -73,16 +68,6 @@ module.exports = (env, argv) => {
 
 		module: {
 			rules: [
-				{
-					type: "javascript/auto", // prevent webpack handling json with its own loaders,
-					test: /manifest\..*.json$/,
-					use: {
-						loader: "wext-manifest-loader",
-						options: {
-							usePackageJSONVersion: true, // set to false to not use package.json version for manifest
-						},
-					},
-				},
 				{
 					test: /.(js|jsx)$/,
 					include: [path.resolve(__dirname, "source/scripts")],
@@ -170,7 +155,28 @@ module.exports = (env, argv) => {
 			}),
 			// copy static assets
 			new CopyWebpackPlugin({
-				patterns: [{ from: "source/assets", to: "assets" }],
+				patterns: [
+					{ from: "source/assets", to: "assets" },
+					{
+						from: "source/" + (targetBrowser === "firefox" ? "manifest.v2.json" : "manifest.v3.json"),
+						to: path.join(__dirname, "extension", targetBrowser, 'manifest.json'),
+						force: true,
+						transform: function (content, path) {
+							// generates the manifest file using the package.json informations
+							return Buffer.from(
+								JSON.stringify(
+									{
+										description: process.env.npm_package_description,
+										version: process.env.npm_package_version,
+										...JSON.parse(content.toString()),
+									},
+									null,
+									"\t"
+								)
+							);
+						},
+					},
+				],
 			}),
 			// plugin to enable browser reloading in development mode
 			// extensionReloaderPlugin,
