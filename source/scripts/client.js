@@ -13,7 +13,13 @@ function ab2string(buf) {
 }
 
 class DuoClient {
-	constructor({akey = '', pkey = '', host = '', code = '', response = ''} = {}) {
+	constructor({
+		akey = '',
+		pkey = '',
+		host = '',
+		code = '',
+		response = '',
+	} = {}) {
 		this.pkey = pkey;
 		this.akey = akey;
 		this.host = host;
@@ -31,7 +37,10 @@ class DuoClient {
 	async import_private_key(private_key) {
 		const pemHeader = '-----BEGIN PRIVATE KEY-----';
 		const pemFooter = '-----END PRIVATE KEY-----';
-		const pemContents = private_key.trim().slice(pemHeader.length, private_key.length - pemFooter.length).replace(/\n/g, '');
+		const pemContents = private_key
+			.trim()
+			.slice(pemHeader.length, private_key.length - pemFooter.length)
+			.replace(/\n/g, '');
 		// Base64 decode the string to get the binary data
 		const binaryDerString = atob(pemContents);
 		// Convert from a binary string to an ArrayBuffer
@@ -52,7 +61,10 @@ class DuoClient {
 	async import_public_key(public_key) {
 		const pemHeader = '-----BEGIN PUBLIC KEY-----';
 		const pemFooter = '-----END PUBLIC KEY-----';
-		const pemContents = public_key.trim().slice(pemHeader.length, public_key.length - pemFooter.length).replace(/\n/g, '');
+		const pemContents = public_key
+			.trim()
+			.slice(pemHeader.length, public_key.length - pemFooter.length)
+			.replace(/\n/g, '');
 		// Base64 decode the string to get the binary data
 		const binaryDerString = atob(pemContents);
 		// Convert from a binary string to an ArrayBuffer
@@ -71,7 +83,10 @@ class DuoClient {
 	}
 
 	async import_key(keyPair) {
-		const [privateKey, publicKey] = await Promise.all([this.import_private_key(keyPair.privateKey), this.import_public_key(keyPair.publicKey)]);
+		const [privateKey, publicKey] = await Promise.all([
+			this.import_private_key(keyPair.privateKey),
+			this.import_public_key(keyPair.publicKey),
+		]);
 		this.keyPair = {privateKey, publicKey};
 	}
 
@@ -88,7 +103,8 @@ class DuoClient {
 		);
 	}
 
-	async export_private_key() { // Crypto API doesn't support deriving public key from private key with extra params
+	async export_private_key() {
+		// Crypto API doesn't support deriving public key from private key with extra params
 		// https://github.com/mdn/dom-examples/blob/master/web-crypto/export-key/pkcs8.js
 
 		const exported = await crypto.subtle.exportKey(
@@ -97,7 +113,9 @@ class DuoClient {
 		);
 		const exportedAsString = ab2string(exported);
 		const exportedAsBase64 = btoa(exportedAsString);
-		const pemExported = `-----BEGIN PRIVATE KEY-----\n${exportedAsBase64.match(/.{1,64}/g).join('\n')}\n-----END PRIVATE KEY-----`;
+		const pemExported = `-----BEGIN PRIVATE KEY-----\n${exportedAsBase64
+			.match(/.{1,64}/g)
+			.join('\n')}\n-----END PRIVATE KEY-----`;
 
 		return pemExported;
 	}
@@ -111,13 +129,18 @@ class DuoClient {
 		);
 		const exportedAsString = ab2string(exported);
 		const exportedAsBase64 = btoa(exportedAsString);
-		const pemExported = `-----BEGIN PUBLIC KEY-----\n${exportedAsBase64.match(/.{1,64}/g).join('\n')}\n-----END PUBLIC KEY-----`;
+		const pemExported = `-----BEGIN PUBLIC KEY-----\n${exportedAsBase64
+			.match(/.{1,64}/g)
+			.join('\n')}\n-----END PUBLIC KEY-----`;
 
 		return pemExported;
 	}
 
 	async export_keyPair() {
-		const [privateKey, publicKey] = await Promise.all([this.export_private_key(), this.export_public_key()]);
+		const [privateKey, publicKey] = await Promise.all([
+			this.export_private_key(),
+			this.export_public_key(),
+		]);
 		return {privateKey, publicKey};
 	}
 
@@ -141,7 +164,7 @@ class DuoClient {
 		this.response = response;
 		if (this.host && !('host' in this.response && this.response.host)) {
 			this.response.host = this.host;
-		} else if (!this.host && ('host' in this.response && this.response.host)) {
+		} else if (!this.host && 'host' in this.response && this.response.host) {
 			this.host = this.response.host;
 		}
 
@@ -164,7 +187,8 @@ class DuoClient {
 				pkpush: 'rsa-sha512',
 			};
 
-			const response = await fetch(`https://${this.host}/push/v2/activation/${this.code}?customer_protocol=1`,
+			const response = await fetch(
+				`https://${this.host}/push/v2/activation/${this.code}?customer_protocol=1`,
 				{
 					method: 'POST',
 					mode: 'cors',
@@ -172,7 +196,8 @@ class DuoClient {
 					headers: {
 						'Content-Type': 'application/x-www-form-urlencoded',
 					},
-				});
+				},
+			);
 			const resp = await response.json();
 			if (resp.stat && resp.stat === 'FAIL') {
 				throw new Error(resp.message || 'Invalid activation code');
@@ -186,11 +211,24 @@ class DuoClient {
 
 	async generate_signature(method, path, time, data) {
 		const parameters = new URLSearchParams(data);
-		const message = (time + '\n' + method + '\n' + this.host.toLowerCase() + '\n' + path + '\n' + parameters.toString());
+		const message
+			= time
+			+ '\n'
+			+ method
+			+ '\n'
+			+ this.host.toLowerCase()
+			+ '\n'
+			+ path
+			+ '\n'
+			+ parameters.toString();
 		console.log(message);
 		const encoder = new TextEncoder();
 		const bin = encoder.encode(message);
-		const signature = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', this.keyPair.privateKey, bin);
+		const signature = await crypto.subtle.sign(
+			'RSASSA-PKCS1-v1_5',
+			this.keyPair.privateKey,
+			bin,
+		);
 		return 'Basic ' + btoa(this.pkey + ':' + btoa(ab2string(signature)));
 	}
 
@@ -198,7 +236,12 @@ class DuoClient {
 		const date = new Date();
 		const time = date.toUTCString().replace('GMT', '-0000');
 		const path = '/push/v2/device/transactions';
-		const data = {akey: this.akey, fips_status: '1', hsm_status: 'True', pkpush: 'rsa-sha512'};
+		const data = {
+			akey: this.akey,
+			fips_status: '1',
+			hsm_status: 'True',
+			pkpush: 'rsa-sha512',
+		};
 
 		const signature = await this.generate_signature('GET', path, time, data);
 		console.log(signature);
@@ -227,7 +270,13 @@ class DuoClient {
 		const date = new Date();
 		const time = date.toUTCString().replace('GMT', '-0000');
 		const path = '/push/v2/device/transactions/' + transaction_id;
-		const data = {akey: this.akey, answer, fips_status: '1', hsm_status: 'True', pkpush: 'rsa-sha512'};
+		const data = {
+			akey: this.akey,
+			answer,
+			fips_status: '1',
+			hsm_status: 'True',
+			pkpush: 'rsa-sha512',
+		};
 
 		const signature = await this.generate_signature('POST', path, time, data);
 		console.log(signature);
@@ -251,6 +300,23 @@ class DuoClient {
 		}
 
 		return resp.response;
+	}
+
+	async generate_hotp(counter) {
+		const hotp_secret = this.response.hotp_secret;
+		const buffer = new ArrayBuffer(8);
+		const data = new DataView(buffer);
+		data.setUint32(4, counter, false);
+
+		const key = string2ab(hotp_secret);
+		const key_mac = await crypto.subtle.importKey('raw', key, {name: 'HMAC', hash: 'SHA-1'}, true, ['sign', 'verify']);
+		const hmac = await crypto.subtle.sign('hmac', key_mac, buffer);
+
+		const hmac_dv = new DataView(hmac);
+		// eslint-disable-next-line no-bitwise
+		const i2 = hmac_dv.getUint8(hmac_dv.byteLength - 1) & 15;
+
+		return hmac_dv.getUint32(i2) % (10 ** 6);
 	}
 }
 

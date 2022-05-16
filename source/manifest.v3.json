@@ -31,5 +31,6 @@
 	],
 	"background": {
 		"service_worker": "js/background.bundle.js"
-	}
+	},
+	"options_page": "options.html"
 }

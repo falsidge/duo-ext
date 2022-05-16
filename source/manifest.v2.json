@@ -36,5 +36,9 @@
 	],
 	"background": {
 		"scripts": ["js/background.bundle.js"]
+	},
+	"options_ui": {
+		"page": "options.html",
+		"browser_style": true
 	}
 }
