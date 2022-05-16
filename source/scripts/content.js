@@ -32,15 +32,13 @@ async function loadPages() {
 	const storage = await browser.storage.local.get({site_creds: {}});
 	console.log(storage);
 	const site_storage = window.location.host in storage.site_creds ? storage.site_creds[window.location.host] : {};
-	if (site_storage)
-	{
-		let myPort = browser.runtime.connect({name:window.location.host});
-		document.querySelector("auth-button").addEventListener("click",()=>
-		{
-			myPort.postMessage({wake:"wake up"});
-		})
+	if (site_storage) {
+		const myPort = browser.runtime.connect({name: window.location.host});
+		document.querySelector('auth-button').addEventListener('click', () => {
+			myPort.postMessage({wake: 'wake up'});
+		});
 	}
-	
+
 	if ('activation' in site_storage && site_storage.activation) {
 		switch (window.location.pathname) {
 			case '/frame/enroll/flow': {
