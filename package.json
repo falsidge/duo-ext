@@ -1,6 +1,6 @@
 {
 	"name": "duo-ext",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "Extension for duo",
 	"private": true,
 	"scripts": {
