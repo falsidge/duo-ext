@@ -1,19 +1,22 @@
-const path = require("path");
-const webpack = require("webpack");
-const FilemanagerPlugin = require("filemanager-webpack-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-// const ExtensionReloader = require('webpack-extension-reloader');
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const WebpackDevServer = require("webpack-dev-server");
+/* eslint-disable unicorn/prefer-module */
+/* eslint-disable node/prefer-global/process */
+/* eslint-disable node/prefer-global/buffer */
+const path = require('path');
+const webpack = require('webpack');
+const FilemanagerPlugin = require('filemanager-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// Const ExtensionReloader = require('webpack-extension-reloader');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const WebpackDevServer = require('webpack-dev-server');
 
-const nodeEnv = process.env.NODE_ENV || "development";
+const nodeEnv = process.env.NODE_ENV || 'development';
 const targetBrowser = process.env.TARGET_BROWSER;
 
-// const extensionReloaderPlugin =
+// Const extensionReloaderPlugin =
 //   nodeEnv === 'development'
 //     ? new ExtensionReloader({
 //         port: 9090,
@@ -29,18 +32,19 @@ const targetBrowser = process.env.TARGET_BROWSER;
 //         this.apply = () => {};
 //       };
 
-const getExtensionFileType = (browser) => {
-	if (browser === "opera") {
-		return "crx";
-	}
-	if (browser === "firefox") {
-		return "xpi";
+const getExtensionFileType = browser => {
+	if (browser === 'opera') {
+		return 'crx';
 	}
 
-	return "zip";
+	if (browser === 'firefox') {
+		return 'xpi';
+	}
+
+	return 'zip';
 };
 
-module.exports = (env, argv) => {
+module.exports = env => {
 	const config = {
 		devtool: false, // https://github.com/webpack/webpack/issues/1194#issuecomment-560382342
 
@@ -54,30 +58,30 @@ module.exports = (env, argv) => {
 		},
 
 		entry: {
-			background: "./source/scripts/background.js",
-			content: "./source/scripts/content.js",
-			popup: "./source/scripts/popup.js",
-			options: "./source/scripts/options.js",
+			background: './source/scripts/background.js',
+			content: './source/scripts/content.js',
+			popup: './source/scripts/popup.js',
+			options: './source/scripts/options.js',
 		},
 
 		output: {
-			path: path.resolve(__dirname, "extension", targetBrowser),
-			filename: "js/[name].bundle.js",
+			path: path.resolve(__dirname, 'extension', targetBrowser),
+			filename: 'js/[name].bundle.js',
 		},
 
 		module: {
 			rules: [
 				{
 					test: /.(js|jsx)$/,
-					include: [path.resolve(__dirname, "source/scripts")],
-					loader: "babel-loader",
+					include: [path.resolve(__dirname, 'source/scripts')],
+					loader: 'babel-loader',
 
 					options: {
-						plugins: ["syntax-dynamic-import"],
+						plugins: ['syntax-dynamic-import'],
 
 						presets: [
 							[
-								"@babel/preset-env",
+								'@babel/preset-env',
 								{
 									modules: false,
 								},
@@ -92,18 +96,18 @@ module.exports = (env, argv) => {
 							loader: MiniCssExtractPlugin.loader, // It creates a CSS file per JS file which contains CSS
 						},
 						{
-							loader: "css-loader",
+							loader: 'css-loader',
 							options: {
-								sourceMap: nodeEnv === "development",
+								sourceMap: nodeEnv === 'development',
 							},
 						},
 						{
-							loader: "postcss-loader",
+							loader: 'postcss-loader',
 							options: {
 								postcssOptions: {
 									plugins: [
 										[
-											"autoprefixer",
+											'autoprefixer',
 											{
 												// Options
 											},
@@ -112,8 +116,8 @@ module.exports = (env, argv) => {
 								},
 							},
 						},
-						"resolve-url-loader",
-						"sass-loader",
+						'resolve-url-loader',
+						'sass-loader',
 					],
 				},
 			],
@@ -123,45 +127,45 @@ module.exports = (env, argv) => {
 			new webpack.ProgressPlugin(),
 			// Generate manifest.json
 			// Generate sourcemaps
-			new webpack.SourceMapDevToolPlugin({ filename: false }),
-			new webpack.EnvironmentPlugin(["NODE_ENV", "TARGET_BROWSER"]),
+			new webpack.SourceMapDevToolPlugin({filename: false}),
+			new webpack.EnvironmentPlugin(['NODE_ENV', 'TARGET_BROWSER']),
 			new CleanWebpackPlugin({
 				cleanOnceBeforeBuildPatterns: [
 					path.join(process.cwd(), `extension/${targetBrowser}`),
 					path.join(
 						process.cwd(),
-						`extension/${targetBrowser}.${getExtensionFileType(targetBrowser)}`
+						`extension/${targetBrowser}.${getExtensionFileType(targetBrowser)}`,
 					),
 				],
 				cleanStaleWebpackAssets: false,
 				verbose: true,
 			}),
-			// write css file(s) to build folder
-			new MiniCssExtractPlugin({ filename: "css/[name].css" }),
+			// Write css file(s) to build folder
+			new MiniCssExtractPlugin({filename: 'css/[name].css'}),
 			new HtmlWebpackPlugin({
-				template: "source/options.html",
-				inject: "body",
+				template: 'source/options.html',
+				inject: 'body',
 				hash: true,
-				chunks: ["options"],
-				filename: "options.html",
+				chunks: ['options'],
+				filename: 'options.html',
 			}),
 			new HtmlWebpackPlugin({
-				template: "source/popup.html",
-				inject: "body",
+				template: 'source/popup.html',
+				inject: 'body',
 				hash: true,
-				chunks: ["popup"],
-				filename: "popup.html",
+				chunks: ['popup'],
+				filename: 'popup.html',
 			}),
-			// copy static assets
+			// Copy static assets
 			new CopyWebpackPlugin({
 				patterns: [
-					{ from: "source/assets", to: "assets" },
+					{from: 'source/assets', to: 'assets'},
 					{
-						from: "source/" + (targetBrowser === "firefox" ? "manifest.v2.json" : "manifest.v3.json"),
-						to: path.join(__dirname, "extension", targetBrowser, 'manifest.json'),
+						from: 'source/' + (targetBrowser === 'firefox' ? 'manifest.v2.json' : 'manifest.v3.json'),
+						to: path.join(__dirname, 'extension', targetBrowser, 'manifest.json'),
 						force: true,
-						transform: function (content, path) {
-							// generates the manifest file using the package.json informations
+						transform(content) {
+							// Generates the manifest file using the package.json informations
 							return Buffer.from(
 								JSON.stringify(
 									{
@@ -170,14 +174,14 @@ module.exports = (env, argv) => {
 										version: process.env.npm_package_version,
 									},
 									null,
-									"\t"
-								)
+									'\t',
+								),
 							);
 						},
 					},
 				],
 			}),
-			// plugin to enable browser reloading in development mode
+			// Plugin to enable browser reloading in development mode
 			// extensionReloaderPlugin,
 		],
 
@@ -199,14 +203,14 @@ module.exports = (env, argv) => {
 						onEnd: {
 							archive: [
 								{
-									format: "zip",
-									source: path.join(__dirname, "extension", targetBrowser),
+									format: 'zip',
+									source: path.join(__dirname, 'extension', targetBrowser),
 									destination: `${path.join(
 										__dirname,
-										"extension",
-										targetBrowser
+										'extension',
+										targetBrowser,
 									)}.${getExtensionFileType(targetBrowser)}`,
-									options: { zlib: { level: 6 } },
+									options: {zlib: {level: 6}},
 								},
 							],
 						},
@@ -225,27 +229,29 @@ module.exports = (env, argv) => {
 				hot: false,
 				client: false,
 				port: env.PORT,
-				host: "localhost",
+				host: 'localhost',
 				static: {
-					directory: path.join(__dirname, "../extension"),
+					directory: path.join(__dirname, '../extension'),
 					watch: false,
 				},
 				headers: {
-					"Access-Control-Allow-Origin": "*",
+					'Access-Control-Allow-Origin': '*',
 				},
 				devMiddleware: {
 					publicPath: `http://localhost:${env.PORT}`,
 					writeToDisk: true,
 				},
-				allowedHosts: "all",
+				allowedHosts: 'all',
 			},
-			compiler
+			compiler,
 		);
-		if (process.env.NODE_ENV === "development" && module.hot) {
+		if (process.env.NODE_ENV === 'development' && module.hot) {
 			module.hot.accept();
 		}
+
 		server.start();
 		return [];
 	}
+
 	return config;
 };

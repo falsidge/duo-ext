@@ -1,4 +1,5 @@
 import browser from 'webextension-polyfill';
+import QRCode from 'qrcode';
 import DuoClient from './client.js';
 import '../styles/popup.scss';
 
@@ -171,6 +172,7 @@ async function loadOTP() {
 
 		const passcode = await currentClient.generate_hotp(counter_value);
 		document.querySelector('#pass').textContent = passcode.toString().padStart(6, '0');
+		document.querySelector('#secret').value = currentClient.export_hotp_secret_standard();
 	}
 }
 
@@ -273,6 +275,27 @@ window.addEventListener('load', function () {
 			const passcode = await currentClient.generate_hotp(counter_value);
 			this.document.querySelector('#pass').textContent = passcode.toString().padStart(6, '0');
 			await browser.storage.local.set(storage);
+		}
+	});
+	const reveal = this.document.querySelector('#show');
+	reveal.addEventListener('click', () => {
+		const secret = this.document.querySelector('#secret');
+		const counter = this.document.querySelector('#counter');
+		secret.type = secret.type === 'password' ? 'text' : 'password';
+		if (secret.type === 'text') {
+			reveal.value = 'Hide';
+			QRCode.toDataURL(currentClient.export_qrcode(counter.value), (error, url) => {
+				if (error) {
+					throw error;
+				}
+
+				const img = document.querySelector('#qr');
+				img.src = url;
+			});
+		} else {
+			reveal.value = 'Show Secret/QR';
+			const img = document.querySelector('#qr');
+			img.src = '';
 		}
 	});
 });

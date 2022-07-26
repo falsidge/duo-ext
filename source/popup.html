@@ -24,7 +24,11 @@
     <div>
         Counter
         <input id="counter" size="4" value="1" type="number">
+        HOTP Secret
+        <input id="secret" size="20" type="password" disabled>
+        <input id="show" value="Show Secret/QR" type="button">
         <p id="pass"></p>
+        <img id="qr"></img>
     </div>
     <div>
         <input type="checkbox" id="autoapprove" name="autoapprove">

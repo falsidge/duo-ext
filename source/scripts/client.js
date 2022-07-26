@@ -1,3 +1,5 @@
+import {base32} from 'rfc4648';
+
 function string2ab(string_) {
 	const buf = new ArrayBuffer(string_.length);
 	const bufView = new Uint8Array(buf);
@@ -316,7 +318,16 @@ class DuoClient {
 		// eslint-disable-next-line no-bitwise
 		const i2 = hmac_dv.getUint8(hmac_dv.byteLength - 1) & 15;
 
-		return hmac_dv.getUint32(i2) % (10 ** 6);
+		// eslint-disable-next-line no-bitwise
+		return (hmac_dv.getUint32(i2) & 0x7F_FF_FF_FF) % (10 ** 6);
+	}
+
+	export_hotp_secret_standard() {
+		return base32.stringify(new Uint8Array(string2ab(this.response.hotp_secret)));
+	}
+
+	export_qrcode(count) {
+		return `otpauth://hotp/${encodeURIComponent(this.response.customer_name)}?secret=${this.export_hotp_secret_standard()}&issuer=${encodeURIComponent(this.response.customer_name)}&counter=${count}`;
 	}
 }
 
