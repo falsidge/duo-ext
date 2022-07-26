@@ -1,6 +1,6 @@
 {
 	"name": "duo-ext",
-	"version": "1.0.6",
+	"version": "1.0.7",
 	"description": "Extension for duo",
 	"private": true,
 	"scripts": {
@@ -68,6 +68,7 @@
 		"file-loader": "^6.2.0",
 		"qrcode": "^1.5.1",
 		"rfc4648": "^1.5.2",
+		"npm-run-all": "^4.1.5",
 		"webext-base-css": "^1.4.0",
 		"webextension-manifest-loader": "^0.1.1",
 		"webextension-polyfill": "^0.9.0"
