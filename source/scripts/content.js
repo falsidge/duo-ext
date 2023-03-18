@@ -13,17 +13,27 @@ function activate() {
 
 async function init() {
 	const storage = await browser.storage.local.get({site_creds: {}});
-	const site_storage = window.location.host in storage.site_creds ? storage.site_creds[window.location.host] : {activation: false};
+	const site_storage = window.location.host in storage.site_creds ? storage.site_creds[window.location.host] : {};
 	console.log(site_storage);
-	if (!('key' in site_storage)) {
-		const element = document.querySelector('nav');
-		if (element) {
-			const button = document.createElement('button');
-			button.type = 'button';
-			button.textContent = 'Activate duo-ext';
-			button.classList.add('button', 'positive');
-			button.addEventListener('click', activate);
-			element.append(button);
+	if (site_storage) {
+		if (!('key' in site_storage)) {
+			const element = document.querySelector('nav');
+			if (element) {
+				const button = document.createElement('button');
+				button.type = 'button';
+				button.textContent = 'Activate duo-ext';
+				button.classList.add('button', 'positive');
+				button.addEventListener('click', activate);
+				element.append(button);
+			}
+		}
+
+		const myPort = browser.runtime.connect({name: window.location.host});
+		const auth_button = document.querySelector('.auth-button');
+		if (auth_button) {
+			auth_button.addEventListener('click', () => {
+				myPort.postMessage({action: 'auth'});
+			});
 		}
 	}
 }
@@ -32,12 +42,19 @@ async function loadPages() {
 	const storage = await browser.storage.local.get({site_creds: {}});
 	console.log(storage);
 	const site_storage = window.location.host in storage.site_creds ? storage.site_creds[window.location.host] : {};
-	if (site_storage) {
-		const myPort = browser.runtime.connect({name: window.location.host});
-		document.querySelector('auth-button').addEventListener('click', () => {
-			myPort.postMessage({wake: 'wake up'});
-		});
-	}
+
+
+	/*  // eslint-disable-line capitalized-comments
+		if (site_storage) {
+	// 	const myPort = browser.runtime.connect({name: window.location.host});
+	// 	const auth_button = document.querySelector('auth-button')
+	// 	if (auth_button) {
+	// 		auth_button.addEventListener('click', () => {
+	// 			myPort.postMessage({action: 'auth'});
+	// 		});
+	// 	}
+	// }
+	*/
 
 	if ('activation' in site_storage && site_storage.activation) {
 		switch (window.location.pathname) {
