@@ -43,7 +43,6 @@ async function loadPages() {
 	console.log(storage);
 	const site_storage = window.location.host in storage.site_creds ? storage.site_creds[window.location.host] : {};
 
-
 	/*  // eslint-disable-line capitalized-comments
 		if (site_storage) {
 	// 	const myPort = browser.runtime.connect({name: window.location.host});

@@ -49,9 +49,7 @@
 	"stylelint": {
 		"extends": [
 			"stylelint-config-xo",
-			"stylelint-config-html",
-			"react-app",
-			"react-app/jest"
+			"stylelint-config-html"
 		],
 		"overrides": [
 			{
