@@ -1,6 +1,6 @@
 {
 	"name": "duo-ext",
-	"version": "1.0.8",
+	"version": "1.0.9",
 	"description": "Extension for duo",
 	"private": true,
 	"scripts": {
@@ -114,7 +114,8 @@
 		"postcss-scss": "^4.0.4",
 		"prettier": "^2.6.2",
 		"resolve-url-loader": "^5.0.0",
-		"sass-loader": "^13.0.2",
+		"sass": "^1.60.0",
+		"sass-loader": "^13.2.1",
 		"stylelint": "^14.6.1",
 		"stylelint-config-html": "^1.0.0",
 		"stylelint-config-xo": "^0.21.0",
